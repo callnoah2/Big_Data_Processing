@@ -33,30 +33,30 @@
 To compute statistics for the entire economy of Washington D.C., from the repository's top directory run:
 
 ```
-$ python src/bigData.py data/DC_complete
+$ python src/big_data.py data/DC_complete
 ```
 
 To generate the report against the national database, use this command:
 
 ```
-$ python src/bigData.py data/USA_full
+$ python src/big_data.py data/USA_full
 ```
 
 When the argument is omitted a message is printed and the program exits:
 
 ```
-$ python src/bigData.py
-Usage: src/bigData.py DATA_DIRECTORY
+$ python src/big_data.py
+Usage: src/big_data.py DATA_DIRECTORY
 ```
 
 When the specified directory is non-existent or inaccessible, let Python's `open()` function fail:
 
 ```
-$ python src/bigData.py data/DERP
+$ python src/big_data.py data/DERP
 Traceback (most recent call last):
-  File "src/bigData.py", line 220, in <module>
+  File "src/big_data.py", line 220, in <module>
     fips = get_fips_areas(sys.argv[1])
-  File "src/bigData.py", line 9, in get_fips_areas
+  File "src/big_data.py", line 9, in get_fips_areas
     with open(f'{datadir}/area-titles.csv') as f:
 FileNotFoundError: [Errno 2] No such file or directory: 'data/DERP/area-titles.csv'
 ```
