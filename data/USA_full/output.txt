@@ -1,9 +1,9 @@
-[============]
-[Final Report]
-[============]
+[==========================================================]
+[ US BLS Quarterly Census of Employment and Wages for 2021 ]
+[==========================================================]
 
-Statistics over all industries in 2021:
-=========================================================
+Statistics over all industries
+-----------------------------------------------------------
 Number of FIPS areas in report       3,274
 
 Total annual wages                   $9,749,457,535,475
@@ -19,8 +19,8 @@ Area with maximum employment         Los Angeles County, California
 Maximum reported employment level    4,252,857
 
 
-Statistics over the software publishing industry in 2021:
-=========================================================
+Statistics in the software publishing industry
+-----------------------------------------------------------
 Number of FIPS areas in report       1,627
 
 Total annual wages                   $111,505,515,321
