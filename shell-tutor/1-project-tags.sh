@@ -282,6 +282,7 @@ clone_test() {
 	HTTPS_URL=99
 	if   _tutr_nonce rm; then return $PASS
 	elif [[ ${_CMD[0]} = git && ${_CMD[1]} = clone && ${_CMD[2]} = http* ]]; then return $HTTPS_URL
+	elif [[ -d "$_GPARENT/project/.git/objects" && -f "$_GPARENT/project/.git/HEAD" ]]; then return 0
 	else _tutr_generic_test -c git -a clone -a "^($_REPO_URL_SSH(.git)?)$" -d "$_GPARENT"
 	fi
 }
@@ -386,6 +387,21 @@ cd_post() {
 
 
 
+pagerhelp() {
+	cat <<-HELP
+	${_Z}While reading the $(_Git Git log) in the pager, navigate with these keyboard commands:
+
+	  * $(kbd Up Arrow)/$(kbd k) scrolls up
+	  * $(kbd Down Arrow)/$(kbd j) scrolls down
+	  * $(kbd Space Bar) moves down by one screenful
+	  * $(kbd G) goes directly to the bottom
+	  * $(kbd g) goes back to the top
+	  * $(kbd q) quits
+
+	Your mouse wheel/trackpad may not work.  Stick to the keyboard.
+	HELP
+}
+
 inspect_repo_pre() {
 	must_be_in_repo
 }
@@ -404,13 +420,9 @@ inspect_repo_prologue() {
 	along with $(bld how much) each file was changed.  This will help you to
 	recognize which commit constitutes which development phase.
 
-	When viewing the $(_Git log), recall that
+	$(pagerhelp)
 
-	  * $(kbd Up Arrow)/$(kbd k) scrolls up
-	  * $(kbd Down Arrow)/$(kbd j) scrolls down
-	  * $(kbd Space Bar) moves down by one screenful
-	  * $(kbd g) scroll back to the top
-	  * $(kbd q) quits
+	You can run $(cmd pagerhelp) at any time to see these commands again.
 
 	Run $(cmd git log --stat) now.
 	MSG
@@ -430,7 +442,7 @@ inspect_repo_hint() {
 
 			cat <<-MSG
 
-			Run $(cmd git log --stat) to view the detailed commit log.
+			$(cmd git log --stat) displays the detailed $(_Git git log).
 			MSG
 			;;
 	esac
@@ -836,12 +848,18 @@ analyzed_prologue() {
 
 	Using $(cmd git log --stat), locate the commit that represents the culmination
 	of the $(_analyzed analysis) phase.  It will be one of the earliest commits in the
-	log, and can be found near the bottom.  Make note of its commit ID, and
-	run $(cmd git tag analyzed COMMIT_ID) to place the tag.  Note the spelling of
-	this tag - it must be written in lower-case and in the past-tense.
+	log, and can be found near the bottom.
 
-	If you make a mistake, run $(cmd git tag -d TAG_NAME) to delete the tag
-	and try again.
+	Run $(cmd pagerhelp) to see the pager's shortcuts again if you need a hint.
+
+	Make note of the ID on the relevent commit, then run
+	  $(cmd git tag analyzed COMMIT_ID)
+	to place the tag.  Note the spelling of this tag - it must be written in
+	lower-case and in the past-tense.
+
+	If you make a mistake, $(cmd git tag -d TAG_NAME) deletes the tag so you
+	can try again.
+
 	:
 }
 
@@ -849,11 +867,11 @@ analyzed_test() {
 	ON_WRONG_COMMIT=99
 	TAG_DOESNT_EXIST=98
 	TAG_NAME_SHA1=97
+	LOOKED_AT_LOG=96
 
 	# nonce commands
 	if _tutr_nonce; then return $PASS
 	elif [[ ${_CMD[*]} == "git help"* ]]; then return $PASS
-	elif [[ ${_CMD[*]} == "git log"* ]]; then return $PASS
 	elif [[ ${_CMD[*]} == "git tag -d"* ]]; then return $PASS
 	fi
 
@@ -861,6 +879,8 @@ analyzed_test() {
 
 	if [[ "$PWD" != "$_REPO_PATH"* ]]; then
 		return $WRONG_PWD
+	elif [[ ${_CMD[*]} == "git log"* ]]; then
+		return $LOOKED_AT_LOG
 	elif git tag --list | command grep -q $_ANALYZED_COMMIT; then
 		(( _FAIL++ ))
 		return $TAG_NAME_SHA1
@@ -886,21 +906,30 @@ analyzed_hint() {
 			return
 			;;
 
+		$LOOKED_AT_LOG)
+			cat <<-MSG
+			Think you found the $(_analyzed) commit?  Tag it!
+
+			MSG
+			return
+			;;
+
 		$ON_WRONG_COMMIT)
 			cat <<-MSG
 			That wasn't the right commit to tag $(_analyzed).
 
-			Delete the tag with $(cmd git tag -d analyzed), look at the log again,
+			Delete the tag with $(cmd git tag -d analyzed), look at the $(_Git log) again,
 			and try tagging another commit.
 
+			Run $(cmd pagerhelp) to see the pager's shortcuts again if you need a hint.
 			MSG
 			;;
 
 		$TAG_DOESNT_EXIST)
 			if (( _FAIL < 4 )); then
 				cat <<-MSG
-				Find the ID of the commit you think best represents the
-				culmination of the first phase of this project, then run
+				Read the $(_Git log) and find the ID of the commit you think best represents the
+				culmination of the first two phases of this project, then run
 				  $(cmd git tag analyzed COMMIT_HASH)
 				to tag it $(_analyzed).
 
@@ -915,8 +944,8 @@ analyzed_hint() {
 			Delete this tag by running
 			  $(cmd git tag -d $_ANALYZED_COMMIT)
 
-			Then look for the commit that best represents the culmination of
-			the first phase of this project, and tag that $(_analyzed).
+			Return to the $(_Git log) to look for the commit that best represents the
+			culmination of the first phase of the project, and tag it $(_analyzed).
 
 			MSG
 			;;
@@ -930,12 +959,15 @@ analyzed_hint() {
 
 		The commit message will say something like
 		  "The project has been analyzed".
+
+		Run $(cmd pagerhelp) to see the pager's shortcuts again if you need a hint.
 		MSG
 	else
 		cat <<-MSG
 		This command will place the $(_analyzed) tag on the right commit:
 		  $(cmd git tag -f analyzed $_ANALYZED_COMMIT)
 
+		Run $(cmd pagerhelp) to see the pager's shortcuts again if you need a hint.
 		MSG
 	fi
 }
@@ -980,6 +1012,8 @@ designed_prologue() {
 	$(_analyzed).  Make note of its ID, and run $(cmd git tag designed COMMIT_ID) to
 	place the tag.  Again, this tag's name is lower-case and past-tense.
 
+	Run $(cmd pagerhelp) if you want to see the pager's shortcuts again.
+
 	The commit messages in this repo are detailed and accurate.  This helps
 	you identify which commit should be tagged $(_designed).
 	MSG
@@ -989,11 +1023,11 @@ designed_test() {
 	ON_WRONG_COMMIT=99
 	TAG_DOESNT_EXIST=98
 	TAG_NAME_SHA1=97
+	LOOKED_AT_LOG=96
 
 	# nonce commands
 	if _tutr_nonce; then return $PASS
 	elif [[ ${_CMD[*]} == "git help"* ]]; then return $PASS
-	elif [[ ${_CMD[*]} == "git log"* ]]; then return $PASS
 	elif [[ ${_CMD[*]} == "git tag -d"* ]]; then return $PASS
 	fi
 
@@ -1001,6 +1035,8 @@ designed_test() {
 
 	if [[ "$PWD" != "$_REPO_PATH"* ]]; then
 		return $WRONG_PWD
+	elif [[ ${_CMD[*]} == "git log"* ]]; then
+		return $LOOKED_AT_LOG
 	elif git tag --list | command grep -q $_DESIGNED_COMMIT; then
 		(( _FAIL++ ))
 		return $TAG_NAME_SHA1
@@ -1026,12 +1062,22 @@ designed_hint() {
 			return
 			;;
 
+		$LOOKED_AT_LOG)
+			cat <<-MSG
+			Think you found the $(_designed) commit?  Tag it!
+
+			MSG
+			return
+			;;
+
 		$ON_WRONG_COMMIT)
 			cat <<-MSG
 			That wasn't the right commit to tag $(_designed).
 
 			Delete the tag with $(cmd git tag -d designed), look at the log again,
 			and try tagging another commit.
+
+			Run $(cmd pagerhelp) to see the pager's shortcuts again.
 
 			MSG
 			;;
@@ -1043,6 +1089,8 @@ designed_hint() {
 				$(_designed design) phase, then run
 				  $(cmd git tag designed COMMIT_HASH)
 				to tag it $(_designed).
+
+				Run $(cmd pagerhelp) to see the pager's shortcuts again.
 
 				MSG
 			fi
@@ -1057,6 +1105,8 @@ designed_hint() {
 
 			Then look for the commit that best represents the culmination of
 			the first phase of this project, and tag that $(_designed).
+
+			Run $(cmd pagerhelp) to see the pager's shortcuts again.
 
 			MSG
 			;;
@@ -1117,6 +1167,9 @@ implemented_prologue() {
 
 	Tag it $(_implemented).  Mind your spelling!  If you make a mistake, try
 	again after $(cmd git tag -d TAG_NAME).
+
+	Run $(cmd pagerhelp) to see the pager's shortcuts again.
+
 	MSG
 }
 
@@ -1124,11 +1177,11 @@ implemented_test() {
 	ON_WRONG_COMMIT=99
 	TAG_DOESNT_EXIST=98
 	TAG_NAME_SHA1=97
+	LOOKED_AT_LOG=96
 
 	# nonce commands
 	if _tutr_nonce; then return $PASS
 	elif [[ ${_CMD[*]} == "git help"* ]]; then return $PASS
-	elif [[ ${_CMD[*]} == "git log"* ]]; then return $PASS
 	elif [[ ${_CMD[*]} == "git tag -d"* ]]; then return $PASS
 	fi
 
@@ -1136,6 +1189,8 @@ implemented_test() {
 
 	if [[ "$PWD" != "$_REPO_PATH"* ]]; then
 		return $WRONG_PWD
+	elif [[ ${_CMD[*]} == "git log"* ]]; then
+		return $LOOKED_AT_LOG
 	elif git tag --list | command grep -q $_IMPLEMENTED_COMMIT; then
 		(( _FAIL++ ))
 		return $TAG_NAME_SHA1
@@ -1161,6 +1216,13 @@ implemented_hint() {
 			return
 			;;
 
+		$LOOKED_AT_LOG)
+			cat <<-MSG
+			Think you found the $(_implemented) commit?  Tag it!
+
+			MSG
+			return
+			;;
 
 		$ON_WRONG_COMMIT)
 			cat <<-MSG
@@ -1168,6 +1230,8 @@ implemented_hint() {
 
 			Delete the tag with $(cmd git tag -d implemented), look at the log again,
 			and try tagging another commit.
+
+			Run $(cmd pagerhelp) to see the pager's shortcuts again.
 
 			MSG
 			;;
@@ -1179,6 +1243,8 @@ implemented_hint() {
 				culmination of the $(_implemented implementation) phase, then run
 				  $(cmd git tag implemented COMMIT_HASH)
 				to tag it $(_implemented).
+
+				Run $(cmd pagerhelp) to see the pager's shortcuts again.
 
 				MSG
 			fi
@@ -1193,6 +1259,8 @@ implemented_hint() {
 
 			Then look for the commit that best represents the culmination of
 			the $(_implemented implementation) phase, and tag that $(_implemented).
+
+			Run $(cmd pagerhelp) to see the pager's shortcuts again.
 
 			MSG
 			;;
@@ -1250,11 +1318,11 @@ tested_test() {
 	ON_WRONG_COMMIT=99
 	TAG_DOESNT_EXIST=98
 	TAG_NAME_SHA1=97
+	LOOKED_AT_LOG=96
 
 	# nonce commands
 	if _tutr_nonce; then return $PASS
 	elif [[ ${_CMD[*]} == "git help"* ]]; then return $PASS
-	elif [[ ${_CMD[*]} == "git log"* ]]; then return $PASS
 	elif [[ ${_CMD[*]} == "git tag -d"* ]]; then return $PASS
 	fi
 
@@ -1262,6 +1330,8 @@ tested_test() {
 
 	if [[ "$PWD" != "$_REPO_PATH"* ]]; then
 		return $WRONG_PWD
+	elif [[ ${_CMD[*]} == "git log"* ]]; then
+		return $LOOKED_AT_LOG
 	elif git tag --list | command grep -q $_TESTED_COMMIT; then
 		(( _FAIL++ ))
 		return $TAG_NAME_SHA1
@@ -1287,6 +1357,13 @@ tested_hint() {
 			return
 			;;
 
+		$LOOKED_AT_LOG)
+			cat <<-MSG
+			Think you found the $(_tested) commit?  Tag it!
+
+			MSG
+			return
+			;;
 
 		$ON_WRONG_COMMIT)
 			cat <<-MSG
@@ -1376,11 +1453,11 @@ deployed_test() {
 	ON_WRONG_COMMIT=99
 	TAG_DOESNT_EXIST=98
 	TAG_NAME_SHA1=97
+	LOOKED_AT_LOG=96
 
 	# nonce commands
 	if _tutr_nonce; then return $PASS
 	elif [[ ${_CMD[*]} == "git help"* ]]; then return $PASS
-	elif [[ ${_CMD[*]} == "git log"* ]]; then return $PASS
 	elif [[ ${_CMD[*]} == "git tag -d"* ]]; then return $PASS
 	fi
 
@@ -1388,6 +1465,8 @@ deployed_test() {
 
 	if [[ "$PWD" != "$_REPO_PATH"* ]]; then
 		return $WRONG_PWD
+	elif [[ ${_CMD[*]} == "git log"* ]]; then
+		return $LOOKED_AT_LOG
 	elif git tag --list | command grep -q $_DEPLOYED_COMMIT; then
 		(( _FAIL++ ))
 		return $TAG_NAME_SHA1
@@ -1413,6 +1492,13 @@ deployed_hint() {
 			return
 			;;
 
+		$LOOKED_AT_LOG)
+			cat <<-MSG
+			Think you found the $(_deployed) commit?  Tag it!
+
+			MSG
+			return
+			;;
 
 		$ON_WRONG_COMMIT)
 			cat <<-MSG
