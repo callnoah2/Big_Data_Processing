@@ -94,14 +94,22 @@ This program's output must *exactly match* the examples down to the smallest det
     *   no extra spaces
     *   no extra quote marks
     *   no FIPS codes; these must be shown as "County, State"
-*   Check that your program finds the correct answers by redirecting its STDOUT to a file, and comparing that to the examples:
+*   Check that your program finds the correct answers by redirecting its STDOUT to a file, and comparing to the examples with the `diff` tool:
     *   ```bash
         $ python src/big_data.py data/UT_all_industries > ut.txt
-        $ diff -u ut.txt data/UT_all_industries/output.txt
+        $ diff -u --color=always ut.txt data/UT_all_industries/output.txt
         ```
     *   The `diff` text tool shows differences between two files
-        *   Its output is most readable when run as `diff -u File0 File0`
-*   This is how we will grade your submission!
+        *   When its arguments are identical, `diff` produces **no output**.  Pay close attention when it does print something!
+        *   The options `-u --color=always` cause the output look like a Git diff.
+    *   **Windows users** may find that *every* line of their program's output differs from the `output.txt` files that I provided, even though there are no apparant differences.   If this happens to you, add the `-Z` option to your command:
+    *   ```bash
+        $ python src/big_data.py data/UT_all_industries > ut.txt
+        $ diff -u -Z --color=always ut.txt data/UT_all_industries/output.txt
+        ```
+        *   `-Z` tells `diff` to ignore the *end of line* (eol) characters in its input files; eol characters differ between Linux and Windows.
+        *   Mac users shouldn't run into this issue
+*   `diff` is how we will grade your submission, so you should make this part of your testing procedure!
 
 
 ### Filling in the report
