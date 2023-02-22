@@ -81,6 +81,45 @@ Deliver:
 *   [ ] Tag the last commit in this phase `designed`
     *   *Grace Points: if this tag is pushed by midnight on the Sunday before the due date, you will receive up to 5 points back*
 
+user input will consist of only one folder, in this folder, I will want to open the area-titles file, then I will split the file by line
+and have it check if it is an FIPS that I want.
+
+
+when the user wants the 2021.annual.singlefile.csv the file will be opened and split.
+I will then check if it is the FIPS that I want, and it will give me any line with the desired vaulues for 
+area_fips, industry_code, and own_code.
+If numeric data must be coverted, dont use eval
+
+I will not want to include FIPS that begin with the letter c and All state wides will end with 000 
+
+
+for reports:
+
+open(file given):
+for every line in file given
+if FIPS starts with a C, or, ends with 000, 
+continue
+else:
+append it to the rpt
+
+for annual singlefile
+
+open(file given)
+for every line
+if fips starts with c or ends with 000, (%1000?)
+contiunue
+elif industry code is 10 and own_code is 0:
+add to industries portion
+elif indusrty code is 5112 snd own_code is 5: 
+add it to software publishing industry
+else: append it to the rpt
+
+These functions above will both take one parameter from the user and open the file.
+
+Good input would require a valid folder to be given,
+bad input because of too few arguments will call a usage function which will simply be there to tell the user how to use the function
+bad input because of a file that cannot be opened will give the user the default error message.
+
 
 ## Phase 2: Implementation (tag name `implemented`)
 *(15% of your effort)*
