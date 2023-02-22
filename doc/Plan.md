@@ -21,6 +21,48 @@ Deliver:
     *   *Grace Points: if this tag is pushed by midnight on the Sunday before the due date, you will receive up to 5 points back*
 
 
+For this assignment, I will need to start by hard coding a few fiels into my program. I Don't know how to do that
+I will use these files that are now hardcoded into my program to process the data.
+To process the data, I Will open each file and read it one line at a time, However, I cannot use .read or .readline()
+I also need to add the parts of the lists to a dictionary
+
+For Area-titles.CSV, I will need to decide what FIPS codes to use by using the area_fips field.
+Then I will need to split each line of this file into exactly two fields.
+Keep track of the FIPS areas that may be icluded in a dictionary
+TREAT THESE CODES LIKE STRINGS
+After discarding all unwanted FIPS areas, I should have 3,463 areas left.
+
+For 2021.annual.singlefile.csv, I will need to hardcode the file into my program.
+This program should skip over all of the lines of the file that the customer does not want. 
+
+If industry_code == 10 and own_code == 0, the data should be added to all industries
+
+if industry_code == 5112 and own_code == 5 It should fo to the softwear publishing indusrty.
+
+
+The Goal of this program is to sort through all FIPS and decide which ones are wanted.
+It will also look through each line of a file provided to see if it is wanted
+wanted items will be printed out to the user.
+
+from the last project, I already know how to open the files and print them, I also know how to split files by line
+but I need to split files by line without using .split I think I will do this with a loop to iterate throught each line
+I also know how to check for information wanted, I can do this with if statments.
+A challenge I can forsee is needing to split each file without using the .split function
+I will also need to find out what FIPS area codes are unwanted. but once that is done, it will be easy to remove unwanted ones
+
+
+All data in this code either is hardcoded into the program, or it is found in the /data folder.
+in the data folder, there are other folders for different areas and different elements of the areas
+This data consists of an area-titles comma sperated file
+this file contains the area_fips, and the area title.
+they also have an output file to show me what it Should look like.
+They also have a README	file, this file shows how to get the data set full copy.
+all data is in a string format, the output should also be in string format
+
+Algorithms will be used to read each file line by line and check if it is a wanted line.
+another algortithm will be used to split CSV files,
+
+
 ## Phase 1: Design (tag name `designed`)
 *(30% of your effort)*
 
