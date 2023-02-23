@@ -24,8 +24,7 @@
 
 import time  	  	  
 import sys  	  	  
-from report import print_report  	  	  
-
+from report import print_report
 
 # print_report takes a dictionary with these contents:  	  	  
 rpt = {  	  	  
@@ -52,15 +51,41 @@ rpt = {
         },  	  	  
 }  	  	  
 
-print("TODO: if sys.argv[1] is not given, print a usage message and exit")  # DELETE ME  	  	  
+if len(sys.argv) <= 1:
+    print("Too few arguments")
+    exit()
 
 print("Reading the databases...", file=sys.stderr)  	  	  
 before = time.time()  	  	  
 
-print("TODO: if opening the file 'sys.argv[1]/area-titles.csv' fails, let your program crash here")  # DELETE ME  	  	  
-print("TODO: Convert the file 'sys.argv[1]/area-titles.csv' into a dictionary")  # DELETE ME  	  	  
-print("TODO: the FIPS dictionary should contain 3,463 pairs")  # DELETE ME  	  	  
+for directory in sys.argv[1:]:
+    file_path = directory + '/area-titles.csv'
 
+with open(file_path, "r") as f:
+    for line in f:
+        FIPS, areaName = line.strip().split(",", maxsplit=1)
+        FIPS = FIPS.strip('""')
+        if FIPS[0].isalpha():
+            continue
+        elif int(FIPS) % 1000 == 0:
+            continue
+        else:
+            print(FIPS)
+
+print("TODO: if opening the file 'sys.argv[1]/area-titles.csv' fails, let your program crash here")  # DELETE ME
+print("TODO: Convert the file 'sys.argv[1]/area-titles.csv' into a dictionary")  # DELETE ME  	  	  
+print("TODO: the FIPS dictionary should contain 3,463 pairs")  # DELETE ME
+# I need to figure out how to open the annual singlefile.
+# then I can split the file into seperate columns for all its data,
+# Then I can compare the data to the industry or the software industry
+# I am not sure what else I need to do with the data.
+
+
+# for directory2 in sys.argv[1:]:
+#     path2 = directory2 + '/2021.annual.singlefile.csv'
+# with open(path2,"r") as file:
+#     for i in file:
+#         print(i)
 print("TODO: if opening the file 'sys.argv[1]/2021.annual.singlefile.csv' fails, let your program crash here")  # DELETE ME  	  	  
 print("TODO: Collect information from 'sys.argv[1]/2021.annual.singlefile.csv'")  # DELETE ME  	  	  
 
