@@ -219,12 +219,12 @@ Each line of this file captures employment statistics such as total wages paid, 
 
 The fields in this file that are significant for our report are:
 
-*   `area_fips`
-*   `industry_code`
-*   `own_code`
-*   `total_annual_wages`
-*   `annual_avg_emplvl`
-*   `annual_avg_estabs`
+*   `area_fips` field 1
+*   `industry_code` field 3
+*   `own_code` field 2
+*   `total_annual_wages` field 16
+*   `annual_avg_emplvl` field 23
+*   `annual_avg_estabs` filed 22
 
 
 ### How to use `2021.annual.singlefile.csv`

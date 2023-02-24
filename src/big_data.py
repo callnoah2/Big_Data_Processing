@@ -59,9 +59,9 @@ print("Reading the databases...", file=sys.stderr)
 before = time.time()  	  	  
 
 for directory in sys.argv[1:]:
-    file_path = directory + '/area-titles.csv'
-
-with open(file_path, "r") as f:
+    filePath = directory + '/area-titles.csv'
+fipsDict = {}
+with open(filePath, "r") as f:
     for line in f:
         FIPS, areaName = line.strip().split(",", maxsplit=1)
         FIPS = FIPS.strip('""')
@@ -70,23 +70,46 @@ with open(file_path, "r") as f:
         elif int(FIPS) % 1000 == 0:
             continue
         else:
-            print(FIPS)
+            fipsDict[FIPS] = areaName
 
-print("TODO: if opening the file 'sys.argv[1]/area-titles.csv' fails, let your program crash here")  # DELETE ME
-print("TODO: Convert the file 'sys.argv[1]/area-titles.csv' into a dictionary")  # DELETE ME  	  	  
-print("TODO: the FIPS dictionary should contain 3,463 pairs")  # DELETE ME
+
 # I need to figure out how to open the annual singlefile.
 # then I can split the file into seperate columns for all its data,
 # Then I can compare the data to the industry or the software industry
 # I am not sure what else I need to do with the data.
 
+num_areas = 0
+total_annual_wages = 0
+max_annual_wage = []
+total_estab = 0
+max_estab = []
+total_empl = 0
+max_empl = []
+for directory2 in sys.argv[1:]:
+    path2 = directory2 + '/2021.annual.singlefile.csv'
+with open(path2,"r") as file:
+    for i in file:
+        print(i,"\nThis is i")
+        if i[0] == "area_fips":
+            print("got here")
+            continue
+        i.strip("''")
+        print(i[2])
+        if int(i[2]) == 10 and int(i[1]) == 0:
+            print("i is given the all tag")
+        elif int(i[2]) == 5112 and int(i[1]) == 5:
+            print("This is given the soft tag")
+        num_areas += 1
+        total_annual_wages += int(i[15])
+        max_annual_wage.append(fipsDict[i[0]])
+        total_estab += int(i[21])
+        total_empl += int(i[22])
 
-# for directory2 in sys.argv[1:]:
-#     path2 = directory2 + '/2021.annual.singlefile.csv'
-# with open(path2,"r") as file:
-#     for i in file:
-#         print(i)
-print("TODO: if opening the file 'sys.argv[1]/2021.annual.singlefile.csv' fails, let your program crash here")  # DELETE ME  	  	  
+
+#todo: I need to split the singlefile by their columns change the indexes because I don't think they
+#will work how I expect it to.
+
+
 print("TODO: Collect information from 'sys.argv[1]/2021.annual.singlefile.csv'")  # DELETE ME  	  	  
 
 print("TODO: Fill in the report dictionary for all industries")  # DELETE ME  	  	  
