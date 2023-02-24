@@ -79,36 +79,34 @@ with open(filePath, "r") as f:
 # I am not sure what else I need to do with the data.
 
 num_areas = 0
-total_annual_wages = 0
+total_annual_wages_count = 0
 max_annual_wage = []
 total_estab = 0
 max_estab = []
 total_empl = 0
 max_empl = []
+rptdict = {}
 for directory2 in sys.argv[1:]:
     path2 = directory2 + '/2021.annual.singlefile.csv'
 with open(path2,"r") as file:
     for i in file:
-        print(i,"\nThis is i")
-        if i[0] == "area_fips":
-            print("got here")
+        area_fips, own_code, industry_code, agglvl_code, size_code, year, qtr, disclosure_code, annual_avg_estabs, annual_avg_emplvl, total_annual_wages, taxable_annual_wages, annual_contributions, annual_avg_wkly_wage, avg_annual_pay, lq_disclosure_code, lq_annual_avg_estabs, lq_annual_avg_emplvl, lq_total_annual_wages, lq_taxable_annual_wages, lq_annual_contributions, lq_annual_avg_wkly_wage, lq_avg_annual_pay, oty_disclosure_code, oty_annual_avg_estabs_chg, oty_annual_avg_estabs_pct_chg, oty_annual_avg_emplvl_chg, oty_annual_avg_emplvl_pct_chg, oty_total_annual_wages_chg, oty_total_annual_wages_pct_chg, oty_taxable_annual_wages_chg, oty_taxable_annual_wages_pct_chg, oty_annual_contributions_chg, oty_annual_contributions_pct_chg, oty_annual_avg_wkly_wage_chg, oty_annual_avg_wkly_wage_pct_chg, oty_avg_annual_pay_chg, oty_avg_annual_pay_pct_chg = i.split(",")
+        if area_fips.strip('/"') not in fipsDict:
             continue
-        i.strip("''")
-        print(i[2])
-        if int(i[2]) == 10 and int(i[1]) == 0:
-            print("i is given the all tag")
-        elif int(i[2]) == 5112 and int(i[1]) == 5:
-            print("This is given the soft tag")
-        num_areas += 1
-        total_annual_wages += int(i[15])
-        max_annual_wage.append(fipsDict[i[0]])
-        total_estab += int(i[21])
-        total_empl += int(i[22])
-
-
-#todo: I need to split the singlefile by their columns change the indexes because I don't think they
-#will work how I expect it to.
-
+        if area_fips.strip('/"') == "area_fips":
+            continue
+        print(industry_code.strip('/"'))
+        print(own_code.strip('/"'), " Own code")
+        if industry_code.strip('/"') == "10" and own_code.strip('/"') == "0":
+            rptdict["all"] = area_fips, own_code, industry_code, total_annual_wages, lq_annual_avg_estabs ,lq_annual_avg_emplvl
+        elif industry_code.strip('/"') == 5112 and own_code.strip('/"') == 5:
+            rptdict["soft"] = area_fips, own_code, industry_code, total_annual_wages, lq_annual_avg_estabs, lq_annual_avg_emplvl
+#         num_areas += 1
+#         total_annual_wages_count += int(total_annual_wages.strip('/"'))
+#         max_annual_wage.append(total_annual_wages_count)
+#         total_estab += float(lq_annual_avg_estabs.strip('/"'))
+#         total_empl += float(lq_annual_avg_emplvl.strip('/"'))
+# max_annual_wage = max(max_annual_wage)
 
 print("TODO: Collect information from 'sys.argv[1]/2021.annual.singlefile.csv'")  # DELETE ME  	  	  
 
