@@ -181,6 +181,8 @@ Deliver:
     *   Run through your test cases to avoid nasty surprises.
     *   Check that your documentation files are all present.
 
+Checked in Gitlab, all commits are there as they should be. I clonned the repository over to my laptop earlier today and It worked 
+great, then I pushed all changes and pulled them on my desktop. All files worked as expected.
 
 ## Phase 5: Maintenance
 
