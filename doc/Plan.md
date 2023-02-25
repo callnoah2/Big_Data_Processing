@@ -133,6 +133,9 @@ Deliver:
     *   e.g. things you learned, things that didn't go according to plan
 *   [ ] Tag the last commit in this phase `implemented`
 
+I had to learn how to use a dictionary. I didnt understand how to put the 2021.singlefile in each of the file, I had to
+ask the tutooring center for help. I had issues with splitting the data up correctly but I learned how to do it the right way.
+
 
 ## Phase 3: Testing and Debugging (tag name `tested`)
 *(30% of your effort)*
@@ -144,7 +147,11 @@ Deliver:
     *   For any bugs discovered, describe their cause and remedy.
     *   Write your test cases in plain language such that a non-coder could run them and replicate your experience.
 *   [ ] Tag the last commit in this phase `tested`
-
+test one, difference with UT_all_Industries:
+the count for the number of areas in the file is off for both "All" and "soft". I don't know the cause yet. 
+I checked to see if it was because one of the area-titles was off, but it had the correct number of FIPS numbers.
+I will put a print statement under all of the 'continues' to see if a line was skipped that shouldn't have bee.
+I also am guessing that some of the files are the wrong section.
 
 ## Phase 4: Deployment (tag name `deployed`)
 *(5% of your effort)*
