@@ -204,3 +204,15 @@ Deliver:
         *   ...to the next version of Python?
 *   [ ] Make one final commit and push your **completed** Software Development Plan to GitLab.
 *   [ ] Respond to the **Assignment Reflection Survey** on Canvas.
+
+I think my code is easy to read, I asked my brother in law to reformat it with me and he taught me a few ways to format it and make it shorter.
+
+I dont fully understand how the report works from the dictionary. I know how to use the key in the dictionary but I am not quite sure how the dictionary for the report got all the data.
+
+I think it would take me 3 hours to find the cause, There are a lot of interdependant lines in the file that make it hard to debug.
+
+I think my documentation makes sense to other people adn myself, however; I wish I worked harder on it and put more detail into it.
+
+I think it would be dificult to add a feature into this, there are a lot of codes that depend on eachother and changing things would be hard, but doable.
+
+This code will need to be changed to work with next years data types. They would be easy changes, but it wouldnt work without them.
