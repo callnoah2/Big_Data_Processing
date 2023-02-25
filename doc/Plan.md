@@ -152,6 +152,17 @@ the count for the number of areas in the file is off for both "All" and "soft". 
 I checked to see if it was because one of the area-titles was off, but it had the correct number of FIPS numbers.
 I will put a print statement under all of the 'continues' to see if a line was skipped that shouldn't have bee.
 I also am guessing that some of the files are the wrong section.
+I realized that that was not the issue, The issue is with all the other fields, Now I will check on my algorithms that compair 
+the data. 
+
+I found out that I was extracting the wrong data from the singlefile. I fixed the data I was taking out.
+
+test two: giving the program wrong parameters.
+I will start by testing the program with no file given then a mispelled file.
+
+With a mispelled file, Open raises an error.
+with a no file, usage message is raised.
+
 
 ## Phase 4: Deployment (tag name `deployed`)
 *(5% of your effort)*
